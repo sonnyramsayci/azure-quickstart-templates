@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Create a Web App plus Redis Cache and DocumentDB using a template",
+  "description": "This template creates an Azure Web App with Redis cache and DocumentDB.",
+  "summary": "Create a Web App plus Redis Cache and DocumentDB using a template",
+  "githubUsername": "sonnyramsayci",
+  "dateUpdated": "2015-08-10"
+}
