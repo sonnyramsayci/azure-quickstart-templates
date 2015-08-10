@@ -1,4 +1,6 @@
-# Create a Web App plus Redis Cache using a template
+# Create a Web App plus Redis Cache and DocumentdB using a template
 
-For information about using this template, see [Create a Web App plus Redis Cache using a template](https://azure.microsoft.com/en-us/documentation/articles/cache-web-app-arm-with-redis-cache-provision/).
+To use this template using Azure PowerShell, use the following command:
+New-AzureResourceGroupDeployment -TemplateUri https://raw.githubusercontent.com/sonnyramsayci/azure-quickstart-templates/201-web-app-with-redis-cache-and-documentdb/azuredeploy.json -ResourceGroupName ExampleDeployGroup
+
 
