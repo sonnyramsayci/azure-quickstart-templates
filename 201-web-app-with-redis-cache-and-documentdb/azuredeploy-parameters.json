@@ -1,14 +1,17 @@
 {
   "siteName": {
-    "value": "SiteName"
+    "value": "MessagingHubPrd"
   },
   "hostingPlanName": {
-    "value": "ServicePlanName"
+    "value": "MessagingHubPrd"
   },
   "siteLocation": {
     "value": "West US"
   },
   "redisCacheName": {
-    "value": "CacheName"
+    "value": "MessagingHubPrd"
+  },
+  "databaseAccountName": {
+    "value": "MessagingHubPrd"
   }
 }

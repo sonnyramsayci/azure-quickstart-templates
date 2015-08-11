@@ -91,9 +91,25 @@
       "metadata": {
         "description": "The Redis server version of the new cache."
       }
+    },
+    "databaseAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the new Azure DocumentDb database to create."
+      }
     }
   },
   "resources": [
+    {
+        "apiVersion": "2015-04-08",
+        "type": "Microsoft.DocumentDb/databaseAccounts",
+        "name": "[parameters('databaseAccountName')]", 
+        "location": "[parameters('location')]", 
+        "properties": {
+            "name": "[parameters('databaseAccountName')]",
+            "databaseAccountOfferType":  "Standard"
+        }
+    },
     {
       "apiVersion": "2014-04-01-preview",
       "name": "[parameters('redisCacheName')]",
@@ -139,10 +155,26 @@
           "type": "config",
           "name": "web",
           "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
+            "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]",
+            "[concat('Microsoft.DocumentDb/databaseAccounts/', parameters('databaseAccountName'))]"
           ],
           "properties": {
+            "connectionStrings": [
+              {
+                "ConnectionString": "[concat(reference(concat('Microsoft.DocumentDb/databaseAccounts/', parameters('databaseAccountName'))).documentEndpoint, '@', listKeys(resourceId('Microsoft.DocumentDb/databaseAccounts', parameters('databaseAccountName')), '2014-07-10').primaryMasterKey)]",
+                "Name": "DocDBConnection", 
+                "Type": 3
+              }
+            ],
             "appSettings": [
+              {
+                "Value":  "[reference(concat('Microsoft.DocumentDb/databaseAccounts/', parameters('databaseAccountName'))).documentEndpoint]",
+                "Name":  "endpoint"
+              },
+              {
+                "Value":  "[listKeys(resourceId('Microsoft.DocumentDb/databaseAccounts', parameters('databaseAccountName')), '2014-07-10').primaryMasterKey]",
+                "Name":  "authKey"
+              },
               {
                 "name": "REDIS_HOST",
                 "value": "[concat(parameters('siteName'), '.redis.cache.windows.net:6379')]"
@@ -150,6 +182,9 @@
               {
                 "name": "REDIS_KEY",
                 "value": "[listKeys(resourceId('Microsoft.Cache/Redis', parameters('redisCacheName')), '2014-04-01').primaryKey]"
+              },
+              { "name": "cacheConnectionString",
+                "value": "[concat(parameters('siteName'), '.redis.cache.windows.net', ',ssl=true,password=', [listKeys(resourceId('Microsoft.Cache/Redis', parameters('redisCacheName')), '2014-04-01').primaryKey])]"
               }
             ]
           }
